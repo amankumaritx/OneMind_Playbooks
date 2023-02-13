@@ -1,0 +1,80 @@
+---
+ - name: Ansible Blocks
+   hosts: router
+   gather_facts: false
+
+# Perform error recovery with rescue block with assert ////////////
+   tasks:
+     - block:
+        - name: List home directory content
+          ios_command:
+            commands: show run 
+          register: value
+        - debug: var=value.stdout_lines
+      # using for print hostname/////////
+        - debug: var=inventory_hostname
+
+        - name: Failing intentionally
+          command: "ls -ll"
+          register: value1
+        - debug: var=value1.stdout_lines
+# using for print hostname//////////
+        - debug: var=inventory_hostname
+
+# assert ///////////////////////////////
+        - name: assert here
+          ansible.builtin.assert:
+            that:
+              - value['failed'] == False
+              - value1['failed'] == False
+            fail_msg: Unable to run praser. Stopping Parser Block
+            success_msg: Parsing is successful ! Proceeding further
+
+        - debug: var=inventory_hostname
+
+# rescue/////////////////////////////////////
+       rescue:
+        - name: Rescue block (perform recovery)
+          debug:
+            msg: "Something went wrong, cleaning up.. :"
+
+    # assert /////////////////////////////
+        - name: assert here
+          ansible.builtin.assert:
+            that:
+              - value['failed'] == False
+              - value1['failed'] == False
+            fail_msg: Unable to run praser. Stopping Parser Block
+            success_msg: Parsing is successful ! Proceeding further
+
+# always running command where condition true or false here//////////
+       always:
+        - name: This will execute always
+          debug:
+            msg: "I will execute even in failure scenario" 
+
+
+
+  #   Perform error recovery with rescue block
+# ---
+#  - name: Ansible Blocks
+#    hosts: router
+#    gather_facts: false
+
+#    tasks:
+#      - block:
+#         - name: List home directory content
+#           command: "ls -l ~/"
+
+#         - name: Failing intentionally
+#           command: "ls -l /tmp/does-not-exist"
+
+#        rescue:
+#         - name: Rescue block (perform recovery)
+#           debug:
+#             msg: "Something went wrong, cleaning up.."
+
+#        always:
+#         - name: This will execute always
+#           debug:
+#             msg: "I will execute even in failure scenario"

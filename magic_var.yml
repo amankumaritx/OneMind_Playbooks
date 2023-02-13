@@ -1,0 +1,7 @@
+---
+- name: Print information about the current system
+  hosts: router
+  tasks:
+    - name: Print the hostname
+      debug:
+        msg: "Hostname: {{ inventory_hostname }}"

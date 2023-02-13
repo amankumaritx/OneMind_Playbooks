@@ -1,0 +1,12 @@
+---
+- name: Dictionary playbook example
+  hosts: router
+  vars: 
+    - mydict: {
+               'Name': 'Aman', 
+               'Email': 'aman123onemind.com', 
+               'location': 'agra'
+               }
+  tasks:
+    - name: Display the Dictionary 
+      debug: var=mydict

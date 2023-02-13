@@ -1,0 +1,13 @@
+---
+- name: Show all files in the current directory
+  hosts: router
+  gather_facts: false
+
+  tasks:
+    - name: Get list of files in current directory
+      shell: ls -a
+      register: result
+
+    - name: Display file names
+      debug:
+        var: result.stdout_lines

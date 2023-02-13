@@ -1,0 +1,39 @@
+---
+- name: Install Tomcat Server
+  hosts: all
+  become: yes
+  tasks:
+    - name: Update system packages
+      become: yes
+      package:
+        name: 'python-apt'
+        state: latest
+
+    - name: Download Tomcat
+      become: yes
+      get_url:
+        url: https://downloads.apache.org/tomcat/tomcat-9/v9.0.41/bin/apache-tomcat-9.0.41.tar.gz
+        dest: /tmp/tomcat.tar.gz
+      
+
+    - name: Extract Tomcat
+      become: yes
+      unarchive:
+        src: /tmp/tomcat.tar.gz
+        dest: /opt/
+        remote_src: yes
+
+    - name: Rename Tomcat folder
+      become: yes
+      file:
+        src: /opt/apache-tomcat-9.0.41
+        dest: /opt/tomcat
+        state: link
+
+    - name: Set permissions for Tomcat
+      become: yes
+      file:
+        path: /opt/tomcat
+        owner: tomcat
+        group: tomcat
+        mode: '0775'

@@ -1,0 +1,23 @@
+---
+- name : "first test"
+  hosts : "localhost"
+  gather_facts : false
+  tasks :
+    - name : "testing first step"
+      vars :
+        mylist :
+                                       $$            $$      $$
+                                    $$    $$         $$    $$
+                                  $$       $$        $$  $$
+                                $$           $$      $$ $$
+                                 $$         $$       $$   $$
+                                     $$  $$          $$     $$
+                                       $$            $$      $$
+          -6
+          -7
+          -8
+          -9
+          -10
+      debug :
+        msg : "{{ mylist }}"
+

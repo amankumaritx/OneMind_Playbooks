@@ -1,0 +1,19 @@
+---
+- name: show version
+  hosts: router
+  gather_facts: False
+  tasks:
+    - name: show information
+      ios_command:
+        commands:
+          - show interfaces
+          - show clock
+      register: data
+    - debug: var=data.stdout_lines
+
+
+
+
+
+
+

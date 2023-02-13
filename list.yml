@@ -1,0 +1,19 @@
+---
+- name: "Example playbook using lists"
+  hosts: router
+  gather_facts: no
+  
+  tasks:
+  - name: Create a list of users
+    set_fact:
+      users:
+        - name: Ram
+          uid: 101
+          gid: 101
+        - name: Syam
+          uid: 102
+          gid: 102
+  
+  - name: Display users information
+    debug:
+      var: users

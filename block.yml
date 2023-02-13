@@ -1,0 +1,38 @@
+---
+- name: Install and configure Apache web server
+  hosts: router
+  become: yes
+  tasks:
+    block:
+    - name: Check if Apache is installed
+        - name: Install Apache
+          apt:
+            name: apache2
+            state: present
+
+        - name: Start Apache service
+          service:
+            name: apache2
+            state: started
+            enabled: yes
+      rescue:
+        - name: Apache already installed
+          debug:
+            msg: Apache is already installed on this system.
+
+    - name: Ensure Apache is running
+      block:
+        - name: Stop Apache service
+          service:
+            name: apache2
+            state: stopped
+
+        - name: Start Apache service
+          service:
+            name: apache2
+            state: started
+            enabled: yes
+      rescue:
+        - name: Apache is already running
+          debug:
+            msg: Apache is already running on this system.

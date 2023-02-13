@@ -1,0 +1,22 @@
+---
+- name: parser in dictionary python
+  hosts: router
+  gather_facts: False
+  tasks:
+    - name: show value
+      ansible.utils.cli_parse:
+        command: show version
+        parser:
+          name: ansible.netcommon.ntc_templates
+      register: parser_value
+    # - debug: var=parser_value['parsed']
+    - set_fact:
+        version_value: "{{ parser_value['parsed']}}"
+    - debug:
+        msg: "{{ item['version'] }}"
+      loop: "{{ version_value }}"
+    - set_fact:
+        version_list: "{{ version_list | default([]) + [{ 'Version' : item.version }] }}"
+        # version_list: "{{ version_list | default([]) + [item['version']] + [item['uptime_years']] }}"
+      loop: "{{ version_value }}"
+    - debug: var=version_list
